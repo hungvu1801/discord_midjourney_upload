@@ -1,0 +1,13 @@
+###################################################################################
+Token babeo 
+AppID: 1098862243451506720
+
+Public key: 32d01417055b3f331afd8ba1ce45be8a210729a519d3ca3452e9844c21db262d
+
+token: MTA5ODg2MjI0MzQ1MTUwNjcyMA.G8VJlh.RhnNXjRrCTX2b_yzScqOHGCJ5aXjUOjtUJZ-Eg
+
+authorization: MzcwMzk0NDg4NTYxOTkxNjgx.GUEkL0.sVvwf50fniyyt8gY1cmww-RxYanA20JhTCAO1k
+
+https://discord.com/channels/815891782075416597/1064930261999038525
+
+https://discord.com/api/v9/channels/1064930261999038525/messages
