@@ -400,3 +400,5 @@ FodyWeavers.xsd
 
 */test.py
 */__pycache__/*
+linux/app/__pycache__/*
+linux/app/__pycache__
