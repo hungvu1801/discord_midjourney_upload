@@ -18,7 +18,7 @@ def click(x, y):
 def write(message):
     pag.write('/imagine', interval=0.01)
     pag.press("enter")
-    click(x, y)
+    click(X_PROMPT, Y_PROMPT)
     pag.write(message, interval=0.001)
     pag.press("enter")
 
@@ -40,7 +40,7 @@ def loadFile(data):
         if startRow > rowNum:
             return
         message = data.iloc[startRow, 1]
-        click(x, y)
+        click(X_MES, Y_MES)
         write(message)
         init -= 1
         startRow +=1
@@ -65,7 +65,7 @@ def testCoordinate():
     Y_MES = 0
     X_PROMPT = 0 
     Y_PROMPT = 0
-    time.sleep(10)
+    time.sleep(5)
     messageCoordinate = pag.position()
     print(messageCoordinate)
     X_MES = messageCoordinate.x
@@ -74,7 +74,7 @@ def testCoordinate():
 
     pag.write('/imagine', interval=0.25)
     pag.press("enter")
-    time.sleep(10)
+    time.sleep(5)
     promptCoordinate = pag.position()
     X_PROMPT = promptCoordinate.x
     Y_PROMPT = promptCoordinate.y
@@ -90,7 +90,7 @@ def main():
     testCoordinate()
     print(X_MES, X_PROMPT)
     print(Y_MES, Y_PROMPT)
-    writeProgram()
+    # writeProgram()
 
     # print(pag.size())
     # # print(pag.position())
