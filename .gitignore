@@ -406,3 +406,7 @@ linux/app/__pycache__
 */Tmp
 linux/discord_env/*
 linux/discord_env
+*/*.png
+*/*.jpeg
+*/*.jpg
+*/*.txt

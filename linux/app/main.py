@@ -1,27 +1,32 @@
 import pyautogui as pag
 import time
-from app.init import checkIfCoordinatesFileExists, getCoorinatesOfCursor, readCoordinatesFile, writeCoordinatesFile
 import logging
-import time
 
-global INITIALWRITE, SECONDWRITE, WAITINGTIME
+from app.init import (
+    checkIfCoordinatesFileExists, 
+    getCoorinatesOfCursor, 
+    readCoordinatesFile, 
+    writeCoordinatesFile, 
+    getCoorinatesMessageWindow,
+    loggerDecor,
+    mkdirTmp)
+
+from app.readWriteMessages import *
+from app.readScreenShot import readScreenShot
 
 
-INITIALWRITE = 7
-SECONDWRITE = 5
-WAITINGTIME = 500
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# def writeProgram():
-#     print(X_MES, Y_MES)
-#     print(X_PROMPT, Y_PROMPT)
-#     return
-
+@loggerDecor
 def main():
     global X_MES, Y_MES, X_PROMPT, Y_PROMPT
-    logger.debug("Start flow main.")
+    
+    # Make directory Tmp
+    _ = mkdirTmp()
+
+    # Check if file coordinates exists
     isFileExists = checkIfCoordinatesFileExists()
     if not isFileExists:
         X_MES, Y_MES, X_PROMPT, Y_PROMPT = getCoorinatesOfCursor(pag)
@@ -30,8 +35,12 @@ def main():
         coordinates = readCoordinatesFile()
         X_MES, Y_MES = map(lambda a: int(a.strip()), coordinates[0])
         X_PROMPT, Y_PROMPT = map(lambda a: int(a.strip()), coordinates[1])
-    print(X_MES, Y_MES)
-    print(X_PROMPT, Y_PROMPT)
+    logger.debug(f"{X_MES}, {Y_MES}")
+    logger.debug(f"{X_PROMPT}, {Y_PROMPT}")
+
+
+
+    # getCoorinatesMessageWindow(pag)
     # writeProgram()
 
     # print(pag.size())
@@ -48,4 +57,4 @@ def main():
     # # pag.write(r"https://s.mj.run/dAewiDMdcaI, Colorful A Fish Watercolor Sublimation Clipart, Clipart, white background, no watermark, no text, no word, --v 5 -")
     # pag.write(r"https://s.mj.run/mfVX6TpPUmE, Medieval Ruin Sublimation Clipart, Clipart, white background, no watermark, no text, no word, --v 5 -")
     # pag.press("enter")
-
+    return 1
