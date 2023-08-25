@@ -22,6 +22,7 @@ logger.setLevel(logging.DEBUG)
 
 @loggerDecor
 def main():
+	# INITIATE THE GLOBAL VARIABLES
 	settings()
 	# Make directory Tmp
 	_ = mkdirTmp()
@@ -47,4 +48,4 @@ def main():
 			data = openPromptFile()
 			count -= 1
 
-	imageGenerator(pag, data)
+	imageGeneratorEngine(pag, data)

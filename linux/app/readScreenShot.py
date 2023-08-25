@@ -3,6 +3,7 @@ import PIL.ImageGrab
 import time
 import cv2
 import re
+from math import ceil
 import logging
 
 # from app.init import loggerDecor
@@ -30,26 +31,30 @@ def screenShot():
     return fileName
 
 @loggerDecor
-def checkPattern(text=None, count=False):
-  pattern1 = "(Your job queue)|(Please wait for)"
+def checkPattern(pattern=None, text=None, count=None):
+  # pattern = "(Your job queue)|(Please wait for)"
   # pattern2 = "(Please check the bottom of the channel)"
+  if not pattern:
+    raise TypeError
+  if not text:
+    with open("Tmp/textOnScreen.txt", "r") as rf:
+      text = rf.readline()
   if not count:
-    if re.search(pattern1, text):
+    if re.search(pattern, text):
       return True
     return False
   else:
-    with open("Tmp/textOnScreen.txt", "r") as rf:
-      text = rf.readline()
     print(text)
-    lst = [x for x in re.findall(pattern1, text) if x != ""]
+    lst = [x for x in re.findall(pattern, text) if x != ""]
     print(lst)
     if len(lst) == 0:
       return 0
-    return round(len(lst) / 2)
+    return ceil(len(lst) / 2)
   
 @loggerDecor   
-def readScreenShot():
-  fileName = screenShot()
+def readScreenShot(fileName=None):
+  if not fileName:
+    fileName = screenShot()
   # imageCv = cv2.imread(fileName)
   # Extract the text from the screenshot
   # custom_config = r'-l eng --oem 3 --psm 6'
@@ -59,10 +64,13 @@ def readScreenShot():
   logger.debug(f"{textCleaned}")
   with open("Tmp/textOnScreen.txt", "w") as wf:
     wf.write(textCleaned)
-  if checkPattern(text=textCleaned):
-     return True
-  return False
+  return textCleaned
 
+################################### TEST ####################################################
+# textscreen = readScreenShot("Tmp/1.png")
+# print(textscreen)
+# pattern = "(Job queue)|(this job will start)"
+# isQueued = checkPattern(pattern, textscreen, True)
+# print(isQueued)
 
-# print(readScreenShot())
 # print(checkPattern(count=True))
