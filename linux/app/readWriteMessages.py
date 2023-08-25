@@ -2,62 +2,59 @@ from tkinter.filedialog import askopenfilename
 import pandas as pd
 import tkinter as tk
 import time
-from app.readScreenShot import readScreenShot
-
+from app.readScreenShot import readScreenShot, checkPattern
+from app.cursorController import *
+from app import config
 # global INITIALWRITE, SECONDWRITE, WAITINGTIME
-global X_MES, Y_MES, X_PROMPT, Y_PROMPT
-global INITIALWRITE, SECONDWRITE, WAITINGTIME
-
-INITIALWRITE = 10
-SECONDWRITE = 5
-WAITINGTIME = 500
-
-def clickCursor(pag, x, y):
-    pag.moveTo(x, y)
-    pag.click()
-
-def writeInPrompt(pag, message):
-    writeInMessage(pag, message="/imagine")
-    clickCursor(X_PROMPT, Y_PROMPT)
-    pag.write(message, interval=0.001)
-    pag.press("enter")
-
-def writeInMessage(pag, message):
-    clickCursor(X_MES, Y_MES)
-    pag.write(message, interval=0.01)
-    pag.press("enter")
 
 
-def readFile():
-    root = tk.Tk()
-    root.withdraw()
-    fileDir = askopenfilename()
-    if not fileDir:
-        return
-    data = pd.read_excel(fileDir)
-    return data
+def openPromptFile():
+	root = tk.Tk()
+	root.withdraw()
+	fileDir = askopenfilename()
+	if not fileDir:
+			return pd.DataFrame()
+	data = pd.read_excel(fileDir, header=None)
+	return data
+
 
 def imageGenerator(pag, data):
+	"""
+		Use file to generate pictures.
+	"""
+	rowNum = data.shape[0]
+	countRow = 0
+	initWrite = config.INITIALWRITE
+	secondWrite = config.SECONDWRITE
+	while initWrite > 0:
+		if countRow > rowNum - 1:
+			return
+		message = data.iloc[countRow, 0]
+		print(message)
+		writeInPrompt(pag, message)
+		isQueued = readScreenShot()
+		if isQueued:
+			offSetFromRow = checkPattern(count=True)
 
-    rowNum = data.shape[0]
-    startRow = 0
-    init = INITIALWRITE
-    
-    while init > 0:
-        if startRow > rowNum:
-            return
-        message = data.iloc[startRow, 1]
-        writeInPrompt(pag, message)
-        init -= 1
-        startRow +=1
-        
-    while True:
-        if startRow > rowNum:
-            return
-        secondWrite = SECONDWRITE
-        time.sleep(WAITINGTIME)
-        while secondWrite > 0:
-            secondWrite -= 1
-            startRow +=1
-            if startRow > rowNum:
-                return
+			countRow -= offSetFromRow
+			# time.sleep(config.WAITINGTIME)
+		time.sleep(5)
+		initWrite -= 1
+		countRow += 1
+	
+	while True:
+		if countRow > rowNum - 1:
+			return
+		isQueued = readScreenShot()
+		if isQueued:
+			offSetFromRow = checkPattern(count=True)
+			countRow -= offSetFromRow
+			time.sleep(config.WAITINGTIME)
+		while secondWrite > 0:
+			message = data.iloc[countRow, 0]
+			writeInPrompt(pag, message)
+			time.sleep(5)
+			countRow += 1
+			secondWrite -= 1
+			if countRow > rowNum - 1:
+				return
